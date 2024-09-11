@@ -34,12 +34,14 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+        run: echo "Dev Key Setup"
 
       - name: Configure AWS credentials for production
         if: matrix.environment == 'production'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        run: echo "Prod Key Setup"
 
       # Step 4: Terraform Init with separate backend for each environment
       - name: Terraform Init for development
