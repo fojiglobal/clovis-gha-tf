@@ -1,10 +1,12 @@
 
-name: Deploy Terraform to AWS
+name: Deploy Terraform to AWS Prod
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
 
 jobs:
   terraform:
