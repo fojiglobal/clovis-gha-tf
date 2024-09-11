@@ -1,5 +1,3 @@
-# .github/workflows/deploy-terraform.yml
-
 name: Deploy Terraform to AWS
 
 on:
