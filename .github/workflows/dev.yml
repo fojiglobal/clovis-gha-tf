@@ -6,16 +6,13 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+env: 
+  AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+  AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 jobs:
   terraform:
     name: Deploy Terraform to Multiple Environments
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        environment: [development, production]
-
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
@@ -24,141 +21,9 @@ jobs:
       # Step 2: Set up Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.5.0  # Adjust this to your required Terraform version
 
-      # Step 3: Configure AWS credentials based on the environment
-      - name: Configure AWS credentials for development
-        if: matrix.environment == 'development'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-        run: echo "Dev Key Setup"
+      - name: Initial Terraform
+        run: terraform init
 
-      - name: Configure AWS credentials for production
-        if: matrix.environment == 'production'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-        run: echo "Prod Key Setup"
-
-      # Step 4: Terraform Init with separate backend for each environment
-      - name: Terraform Init for development
-        if: matrix.environment == 'development'
-        run: terraform init -backend-config="bucket=my-dev-terraform-state" \
-                            -backend-config="dynamodb_table=my-dev-terraform-lock" \
-                            -backend-config="region=us-east-1"
-
-      - name: Terraform Init for production
-        if: matrix.environment == 'production'
-        run: terraform init -backend-config="bucket=my-prod-terraform-state" \
-                            -backend-config="dynamodb_table=my-prod-terraform-lock" \
-                            -backend-config="region=us-east-1"
-
-      # Step 5: Select or create the appropriate workspace
-      - name: Select Terraform Workspace
-        run: terraform workspace select ${{ matrix.environment }} || terraform workspace new ${{ matrix.environment }}
-
-      # Step 6: Validate the Terraform configuration
-      - name: Terraform Validate
-        run: terraform validate
-
-      # Step 7: Plan the Terraform deployment
-      - name: Terraform Plan for development
-        if: matrix.environment == 'development'
-        run: terraform plan -out=tfplan -input=false
-
-      - name: Terraform Plan for production
-        if: matrix.environment == 'production'
-        run: terraform plan -out=tfplan -input=false
-
-      # Step 8: Apply the Terraform deployment
-      - name: Terraform Apply for development
-        if: matrix.environment == 'development'
-        run: terraform apply -auto-approve tfplan
-
-      - name: Terraform Apply for production
-        if: matrix.environment == 'production'
-        run: terraform apply -auto-approve tfplan
-
-# name: Deploy Terraform to AWS
-# on:
-#   push:
-#     branches:
-#       - main
-#   workflow_dispatch:
-
-# jobs:
-#   terraform:
-#     name: Deploy Terraform
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       matrix:
-#         environment: [development, production]
-
-#     steps:
-#       # Checkout the repository
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-
-#       # Set up Terraform
-#       - name: Setup Terraform
-#         uses: hashicorp/setup-terraform@v2
-#         with:
-#           terraform_version: 1.5.0  # Adjust to your Terraform version
-
-#       # Set AWS credentials based on environment
-#       # - name: Set AWS credentials
-#       #   if: matrix.environment == 'development'
-#       #   env:
-#       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-#       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-
-#       # - name: Set AWS credentials
-#       #   if: matrix.environment == 'production'
-#       #   env:
-#       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-#       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-
-#       # Initialize Terraform
-#       - name: Terraform Init
-#         run: terraform init
-
-#       # Select the workspace based on environment
-#       - name: Select Terraform Workspace
-#         run: terraform workspace select ${{ matrix.environment }} || terraform workspace new ${{ matrix.environment }}
-
-#       # Validate the Terraform configuration
-#       - name: Terraform Validate
-#         run: terraform validate
-
-#       # Plan the Terraform deployment
-#       - name: Terraform Plan
-#         run: terraform plan -out=tfplan -input=false
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-#         if: matrix.environment == 'development'
-
-#       - name: Terraform Plan for Production
-#         run: terraform plan -out=tfplan -input=false
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
-#         if: matrix.environment == 'production'
-
-#       # Apply the Terraform deployment
-#       - name: Terraform Apply
-#         if: matrix.environment == 'development'
-#         run: terraform apply -auto-approve tfplan
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
-
-#       - name: Terraform Apply for Production
-#         if: matrix.environment == 'production'
-#         run: terraform apply -auto-approve tfplan
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+      - name: Initial Plan
+        run: terraform plan
