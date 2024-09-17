@@ -27,3 +27,6 @@ jobs:
 
       - name: Initial Plan
         run: terraform plan
+
+      - name: Initial Apply
+        run: terraform apply --auto-approve
