@@ -15,6 +15,7 @@ resource "aws_lb" "qa_alb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.pub_sg.id]
   subnets            = [aws_subnet.qa_pub_1.id, aws_subnet.qa_pub_2.id]
+  drop_invalid_header_fields = true
   tags = {
     Name = "${var.env}-alb"
     Environment = var.env
