@@ -5,29 +5,29 @@ vpc_cidr = "10.1.0.0/16"
   private_subnet = {
     pri-sub-1  = {
         azs = "us-east-2a"
-        cidr = "10.1.1.0/24"
+        cidr = cidrsubnet(local.vpc_cidr, 8, 1) 
     }
     pri-sub-2  = {
         azs = "us-east-2b"
-        cidr = "10.1.2.0/24"
+        cidr = cidrsubnet(local.vpc_cidr, 8, 2) #"10.1.2.0/24"
     }
     pri-sub-3  = {
         azs = "us-east-2c"
-        cidr = "10.1.3.0/24"
+        cidr =cidrsubnet(local.vpc_cidr, 8, 3) 
     }
   }
    public_subnet = {
     pub-sub-1  = {
         azs = "us-east-2a"
-        cidr = "10.1.4.0/24"
+        cidr = cidrsubnet(local.vpc_cidr, 8, 4) 
     }
     pub-sub-2  = {
         azs = "us-east-2b"
-        cidr = "10.1.5.0/24"
+        cidr = cidrsubnet(local.vpc_cidr, 8, 5) 
     }
     pub-sub-3  = {
         azs = "us-east-2c"
-        cidr = "10.1.6.0/24"
+        cidr = cidrsubnet(local.vpc_cidr, 8, 6) 
     }
   }
   public-sg-egress = {
