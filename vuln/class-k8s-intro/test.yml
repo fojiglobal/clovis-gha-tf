@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-reg12
+spec:
+  containers:
+  - name: image-private
+    image: fojiglobal/image-app:test
+  imagePullSecrets:
+  - name: regcred
