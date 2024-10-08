@@ -15,27 +15,32 @@ jobs:
   tf-plan:
     name: tfplan
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
+        if: github.event_name == 'pull_request'
         uses: actions/checkout@v3
 
       # Step 2: Set up Terraform CLI
       - name: Setup Terraform
+        if: github.event_name == 'pull_request'
         uses: hashicorp/setup-terraform@v2
 
       - name: Initial Terraform
+        if: github.event_name == 'pull_request'
         run: terraform init
 
       - name: Validate Terraform Code
+        if: github.event_name == 'pull_request'
         run: terraform validate
 
       - name: Terraform Plan
         id: plan
+        if: github.event_name == 'pull_request'
         run: terraform plan -input=false -no-color
       
       - name: Scan Terraform Codes
+        if: github.event_name == 'pull_request'
         uses: snyk/actions/iac@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -78,7 +83,7 @@ jobs:
       - name: Initial Terraform
         run: terraform init
 
-      - name: Terraform Plan
+      - name: Terraform Apply
         run: echo "Terraform Apply Successfully"
 
     
