@@ -12,9 +12,10 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
 jobs:
-  tf-init:
+  tf-plan:
     name: Deploy Terraform to Multiple Environments
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
@@ -29,20 +30,6 @@ jobs:
 
       - name: Validate Terraform Code
         run: terraform validate
-  tf-plan:
-    needs: tf-init
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Step 2: Set up Terraform CLI
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Initial Terraform
-        run: terraform init
-
       - name: Terraform Plan
         id: plan
         run: terraform plan -input=false -no-color
@@ -50,6 +37,7 @@ jobs:
   tf-scan:
     needs: tf-plan
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
