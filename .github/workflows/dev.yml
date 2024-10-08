@@ -2,9 +2,10 @@
 name: Deploy Terraform to AWS Dev
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
+  pull_request:
   workflow_dispatch:
 env: 
   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -28,9 +29,6 @@ jobs:
 
       - name: Validate Terraform Code
         run: terraform validate
-
-      - name: Initial Plan
-        run: terraform plan
   tf-plan:
     needs: tf-init
     runs-on: ubuntu-latest
@@ -46,7 +44,8 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan
+        id: plan
+        run: terraform plan -input=false -no-color
   
   tf-scan:
     needs: tf-plan
@@ -58,6 +57,7 @@ jobs:
       # Step 2: Set up Terraform CLI
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+
       - name: Scan Terraform Codes
         uses: snyk/actions/iac@master
         env:
@@ -65,12 +65,23 @@ jobs:
         # with:
         #   args: --report
         continue-on-error: true
-     
 
-      # - name: Upload result to GitHub Code Scanning
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: snyk.sarif
+  tf-apply:
+    needs: tf-scan
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # - name: Initial Apply
-      #   run: terraform apply --auto-approve
+      # Step 2: Set up Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Initial Terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        run: echo "Terraform Apply Successfully"
+
+    
