@@ -2,9 +2,9 @@
 name: Deploy Terraform to AWS Dev
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 env: 
