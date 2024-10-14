@@ -95,12 +95,17 @@ jobs:
 
       - name: Terraform Apply
         run: echo "Terraform Apply Successfully"
-
-  tf-destroy:
-    runs-on: ubuntu-latest
-    steps:
       - name: Terraform Destroy
         env:
           destroy: ${{secrets.TF_DESTROY}}
         if: ${{ env.destroy == 'true' }} 
         run: echo "Terraform Destroyed"
+
+  # tf-destroy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Terraform Destroy
+  #       env:
+  #         destroy: ${{secrets.TF_DESTROY}}
+  #       if: ${{ env.destroy == 'true' }} 
+  #       run: echo "Terraform Destroyed"
