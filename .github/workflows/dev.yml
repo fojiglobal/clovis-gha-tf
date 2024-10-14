@@ -101,6 +101,6 @@ jobs:
     steps:
       - name: Terraform Destroy
         env:
-          destroy: ${{env.TF_DES}}
+          destroy: ${{secrets.TF_DESTROY}}
         if: ${{ env.destroy == 'true' }} 
         run: echo "Terraform Destroyed"
