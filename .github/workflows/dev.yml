@@ -14,8 +14,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
-
-
 jobs:
   tf-plan:
     name: tfplan
@@ -28,7 +26,7 @@ jobs:
 
       # Step 2: Set up Terraform CLI
       - name: Setup Terraform
-        if: github.event_name == 'pull_request'
+        #if: github.event_name == 'pull_request'
         uses: hashicorp/setup-terraform@v2
 
       - name: Initial Terraform
@@ -72,33 +70,13 @@ jobs:
               body: output
             })
       - name: Scan Terraform Codes
-        if: github.event_name == 'pull_request'
+        #if: github.event_name == 'pull_request'
         uses: snyk/actions/iac@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         # with:
         #   args: --report
         continue-on-error: true
-  
-  # tf-scan:
-  #   needs: tf-plan
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
-        
-  #     # Step 2: Set up Terraform CLI
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@v2
-
-  #     - name: Scan Terraform Codes
-  #       uses: snyk/actions/iac@master
-  #       env:
-  #         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  #       # with:
-  #       #   args: --report
-  #       continue-on-error: true
 
   tf-apply:
     needs: tf-plan
@@ -117,5 +95,17 @@ jobs:
 
       - name: Terraform Apply
         run: echo "Terraform Apply Successfully"
+      - name: Terraform Destroy
+        env:
+          destroy: ${{secrets.TF_DESTROY}}
+        if: ${{ env.destroy == 'true' }} 
+        run: echo "Terraform Destroyed"
 
-    
+  # tf-destroy:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Terraform Destroy
+  #       env:
+  #         destroy: ${{secrets.TF_DESTROY}}
+  #       if: ${{ env.destroy == 'true' }} 
+  #       run: echo "Terraform Destroyed"
