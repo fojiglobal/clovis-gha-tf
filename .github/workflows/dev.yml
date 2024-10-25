@@ -237,6 +237,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           file: dns.tf
+          extra_args: --severity-threshold=high --report
 
   terraform-apply: 
     if:  always() && github.event_name == 'push' 
