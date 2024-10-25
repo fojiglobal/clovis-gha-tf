@@ -226,9 +226,19 @@ jobs:
               })
             }
 
-  terraform-apply: 
-    if: github.ref == github.event_name == 'push'
+  snyk-iac-scan: 
     needs: terraform-plan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check Kubernetes manifest file for issues
+        uses: snyk/actions/iac@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  terraform-apply: 
+    if: github.event_name == 'push'
+    needs: snyk-iac-scan
     runs-on: ubuntu-latest
     steps:
         - uses: actions/checkout@v4
