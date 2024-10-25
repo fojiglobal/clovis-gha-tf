@@ -230,14 +230,14 @@ jobs:
     needs: terraform-plan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Run Snyk to check Kubernetes manifest file for issues
+      - uses: actions/checkout@v4
+      - name: Run Snky Scan for IaC Misconfiguration
         uses: snyk/actions/iac@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   terraform-apply: 
-    if: github.event_name == 'push'
+    if:  always() && github.event_name == 'push' 
     needs: snyk-iac-scan
     runs-on: ubuntu-latest
     steps:
