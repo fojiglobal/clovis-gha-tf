@@ -180,7 +180,7 @@ jobs:
     #       date
     #       cat /etc/os-release
   terraform-apply: 
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == github.event_name == 'push'
     needs: terraform-plan
     runs-on: ubuntu-latest
     steps:
