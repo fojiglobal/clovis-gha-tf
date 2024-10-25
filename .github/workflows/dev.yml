@@ -141,7 +141,8 @@ env:
 jobs:
   # This workflow contains a single job called "build"
   terraform-plan:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
+    #if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -178,7 +179,7 @@ jobs:
     #     run: |
     #       date
     #       cat /etc/os-release
-  tfapply: 
+  terraform-apply: 
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: terraform-plan
     runs-on: ubuntu-latest
