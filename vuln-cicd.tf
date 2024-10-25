@@ -21,26 +21,26 @@ resource "aws_ebs_volume" "example" {
 }
 
 
-resource "aws_lb" "test" {
-  name               = "test-lb-tf"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = ["sg1"]
-  subnets            = ["sub1", "sub2"]
+# resource "aws_lb" "test" {
+#   name               = "test-lb-tf"
+#   internal           = false
+#   load_balancer_type = "application"
+#   security_groups    = ["sg1"]
+#   subnets            = ["sub1", "sub2"]
 
-  enable_deletion_protection = false
+#   enable_deletion_protection = false
 
-  tags = {
-    Environment = "production"
-  }
-}
+#   tags = {
+#     Environment = "production"
+#   }
+# }
 
-resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.test.arn
-  port              = "80"
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = "tgw1"
-  }
-}
+# resource "aws_lb_listener" "front_end" {
+#   load_balancer_arn = aws_lb.test.arn
+#   port              = "80"
+#   protocol          = "HTTP"
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = "tgw1"
+#   }
+# }
