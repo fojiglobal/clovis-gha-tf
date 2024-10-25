@@ -26,7 +26,7 @@ resource "aws_lb" "test" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["sg1"]
-  subnets            = ["sub1","sub2"]
+  subnets            = ["sub1", "sub2"]
 
   enable_deletion_protection = false
 
