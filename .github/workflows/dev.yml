@@ -236,7 +236,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          file: dns.tf
+          file: vuln-cicd.tf
           args: --severity-threshold=high --report
 
   terraform-apply: 
