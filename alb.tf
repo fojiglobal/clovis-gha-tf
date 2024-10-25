@@ -5,19 +5,19 @@ resource "aws_lb_target_group" "qa_tg" {
   vpc_id   = aws_vpc.qa.id
   health_check {
     healthy_threshold = 2
-    interval = 10
+    interval          = 10
   }
 }
 
 resource "aws_lb" "qa_alb" {
-  name               = "${var.env}-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.pub_sg.id]
-  subnets            = [aws_subnet.qa_pub_1.id, aws_subnet.qa_pub_2.id]
+  name                       = "${var.env}-alb"
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.pub_sg.id]
+  subnets                    = [aws_subnet.qa_pub_1.id, aws_subnet.qa_pub_2.id]
   drop_invalid_header_fields = true
   tags = {
-    Name = "${var.env}-alb"
+    Name        = "${var.env}-alb"
     Environment = var.env
   }
 }
