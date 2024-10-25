@@ -24,26 +24,26 @@ variable "env" {
 }
 
 variable "alb_port_http" {
-  type = string
+  type    = string
   default = "80"
 }
 
 variable "alb_port_https" {
-  type = string
+  type    = string
   default = "443"
 }
 
 variable "alb_proto_http" {
-  type = string
+  type    = string
   default = "HTTP"
 }
 
 variable "alb_proto_https" {
-  type = string
+  type    = string
   default = "HTTPS"
 }
 
 variable "alb_ssl_profile" {
-  type = string
+  type    = string
   default = "ELBSecurityPolicy-2016-08"
 }
