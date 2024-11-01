@@ -254,6 +254,7 @@ jobs:
 
   terraform-destroy: 
     runs-on: ubuntu-latest
+    needs: terraform-apply
     steps:
         - uses: actions/checkout@v4
         - uses: hashicorp/setup-terraform@v3
@@ -262,5 +263,5 @@ jobs:
           run: terraform init
         - name: Destroy Terraform
           run: |
-            if [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+            if [ "${{ env.TF_DESTROY }}" == true ]; then
               terraform destroy -auto-approve
