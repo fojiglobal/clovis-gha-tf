@@ -155,7 +155,7 @@ jobs:
         id: fmt
         run: terraform fmt -check
 
-        #continue-on-error: true
+        #continue-on-error: true ok yes
 
       - name: Terraform Init
         id: init
@@ -235,6 +235,9 @@ jobs:
         uses: snyk/actions/iac@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          file: vuln-cicd.tf
+          args: --severity-threshold=high --report
 
   terraform-apply: 
     if:  always() && github.event_name == 'push' 
