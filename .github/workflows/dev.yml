@@ -136,6 +136,7 @@ permissions:
 env:
     AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+    TF_DES: ${{secrets.TF_DESTROY}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -263,7 +264,4 @@ jobs:
           id: init
           run: terraform init
         - name: Destroy Terraform
-          # env:
-          #   destroy: ${{env.TF_DES}}
-          #if: ${{ env.TF_DES == 'true' }} 
-          run: echo "Terraform Destroyed"
+          run: terraform destroy --auto-approve
