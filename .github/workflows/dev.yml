@@ -253,6 +253,7 @@ jobs:
           run: terraform apply --auto-approve
 
   terraform-destroy: 
+    if:  always() && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     needs: terraform-apply
     steps:
@@ -263,5 +264,4 @@ jobs:
           run: terraform init
         - name: Destroy Terraform
           run: |
-            if [ "${{ env.TF_DESTROY }}" == true ]; then
-              terraform destroy -auto-approve
+            echo "tf Destroy"
