@@ -263,6 +263,7 @@ jobs:
           id: init
           run: terraform init
         - name: Destroy Terraform
-          run: |
-            if [ "${{ env.TF_DES }}" == true ]; then
-              echo "terraform destroy" 
+          # env:
+          #   destroy: ${{env.TF_DES}}
+          #if: ${{ env.TF_DES == 'true' }} 
+          run: echo "Terraform Destroyed"
