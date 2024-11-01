@@ -240,7 +240,7 @@ jobs:
           args: --severity-threshold=high --report
 
   terraform-apply: 
-    if:  always() && github.event_name == 'push' 
+    if:  always() && github.event_name == 'push'
     needs: snyk-iac-scan
     runs-on: ubuntu-latest
     steps:
@@ -251,4 +251,16 @@ jobs:
           run: terraform init
         - name: Deploy Terraform
           run: terraform apply --auto-approve
-       
+
+  terraform-destroy: 
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4
+        - uses: hashicorp/setup-terraform@v3
+        - name: Terraform Init
+          id: init
+          run: terraform init
+        - name: Destroy Terraform
+          run: |
+            if [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+              terraform destroy -auto-approve
