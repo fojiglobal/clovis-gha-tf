@@ -264,4 +264,5 @@ jobs:
           run: terraform init
         - name: Destroy Terraform
           run: |
-            echo "tf Destroy"
+            if [ "${{ env.TF_DES }}" == true ]; then
+              echo "terraform destroy" 
