@@ -8,8 +8,8 @@
 #   pull_request:
 #   workflow_dispatch:
 # permissions: write-all
-# # contents: read
-# # issues: write
+# contents: read
+# issues: write
 # env: 
 #   AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
 #   AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
@@ -139,8 +139,13 @@ env:
     TF_DES: ${{secrets.TF_DESTROY}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+defaults:
+  run:
+    shell: bash
+    working-directory: "./qa/"
 jobs:
   # This workflow contains a single job called "build"
+  
   terraform-plan:
     #if: github.ref == 'refs/heads/main' && github.event_name == 'pull_request'
     if: github.event_name == 'pull_request'
