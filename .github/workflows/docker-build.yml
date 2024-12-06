@@ -51,7 +51,7 @@ jobs:
           docker tag finance-app:latest $IMAGE_URI
         id: image-tag
 
-      # Step 7: Push Docker image to ECR
+      # Step 7: Push Docker image to ECR  # docker push ${{ steps.image-tag.outputs.IMAGE_URI }}
       - name: Push Docker image to ECR
         run: |
-          docker push "${{ steps.image-tag.outputs.IMAGE_URI }}"
+          docker push finance-app:latest
