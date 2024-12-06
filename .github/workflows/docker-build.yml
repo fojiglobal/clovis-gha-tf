@@ -39,6 +39,7 @@ jobs:
         uses: snyk/actions/docker@master
         with:
           image: finance-app:latest
+          args: --severity-threshold=high --report
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
