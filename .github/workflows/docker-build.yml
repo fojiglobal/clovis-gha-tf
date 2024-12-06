@@ -3,6 +3,10 @@ name: Build and Publish to ECR
 on:
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+    working-directory: "./docker/"
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
