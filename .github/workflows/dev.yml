@@ -231,7 +231,7 @@ jobs:
                 body: output
               })
             }
-
+#added a comment
   snyk-iac-scan: 
     needs: terraform-plan
     runs-on: ubuntu-latest
@@ -242,7 +242,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          file: vuln-cicd.tf
+          file:  "./qa/"
           args: --severity-threshold=high --report
 
   terraform-apply: 
