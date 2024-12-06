@@ -36,7 +36,7 @@ jobs:
 
       # Step 5: Scan Docker image with Snyk
       - name: Snyk Security Scan
-        uses: snyk/actions/docker@v1.1.4
+        uses: snyk/actions/docker@master
         with:
           image: finance-app:latest
         env:
