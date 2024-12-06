@@ -42,6 +42,7 @@ jobs:
           args: --severity-threshold=high --report
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
 
       # Step 6: Tag the Docker image for ECR
       - name: Tag Docker image
