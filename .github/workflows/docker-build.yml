@@ -8,11 +8,11 @@ defaults:
     shell: bash
     working-directory: "./docker/"
 env:
-    ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY_NAME}}
-    IMAGE_TAG: january
     AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
     AWS_REGION: ${{secrets.AWS_REGION}}
+    ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY_NAME}}
+    IMAGE_TAG: v1.0
 
 jobs:
   build-and-publish:
@@ -53,14 +53,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         continue-on-error: true
-
-      # Step 6: Tag the Docker image for ECR
-    #   - name: Tag Docker image
-    #     run: |
-    #       IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-    #       docker tag webapp:latest $IMAGE_URI
-    #       echo $IMAGE_URI
-    #     id: image-tag
 
       #Step 7: Push Docker image to ECR  # docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:december
       - name: Push Docker image to ECR
