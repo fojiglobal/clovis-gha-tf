@@ -12,7 +12,7 @@ env:
     IMAGE_TAG: january
     AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-    AWS_REGION: us-east-2
+    AWS_REGION: ${{secrets.AWS_REGION}}
 
 jobs:
   build-and-publish:
@@ -44,15 +44,15 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         id: docker-build
          
-    #   # Step 5: Scan Docker image with Snyk
-    #   - name: Snyk Security Scan
-    #     uses: snyk/actions/docker@master
-    #     with:
-    #       image: finance-app:latest
-    #       args: --severity-threshold=high --report
-    #     env:
-    #       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-    #     continue-on-error: true
+      # Step 5: Scan Docker image with Snyk
+      - name: Snyk Security Scan
+        uses: snyk/actions/docker@master
+        with:
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{env.IMAGE_TAG}}
+          args: --severity-threshold=high --report
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
 
       # Step 6: Tag the Docker image for ECR
     #   - name: Tag Docker image
