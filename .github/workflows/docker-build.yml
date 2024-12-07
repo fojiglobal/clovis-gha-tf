@@ -34,7 +34,7 @@ jobs:
         env:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
             ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY_NAME}}
-            IMAGE_TAG: december
+            IMAGE_TAG: v1.1
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           echo $IMAGE_NAME
@@ -61,5 +61,5 @@ jobs:
       #Step 7: Push Docker image to ECR  # docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:december
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:december
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:${{ steps.login-ecr.outputs.IMAGE_TAG }}
          
