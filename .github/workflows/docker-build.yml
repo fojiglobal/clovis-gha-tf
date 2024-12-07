@@ -59,7 +59,7 @@ jobs:
     #       echo $IMAGE_URI
     #     id: image-tag
 
-      #Step 7: Push Docker image to ECR  # docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:latest
+      #Step 7: Push Docker image to ECR  # docker push ${{ steps.login-ecr.outputs.registry }}/${{secrets.ECR_REPOSITORY_NAME}}:december
       - name: Push Docker image to ECR
         run: |
           docker push ${{ steps.docker-build.outputs.IMAGE_NAME }}
