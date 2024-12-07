@@ -34,11 +34,11 @@ jobs:
         env:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
             ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY_NAME}}
-            IMAGE_TAG: ${{ github.sha }}
+            IMAGE_TAG: latest
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
+        id: docker-build
+         
     #   # Step 5: Scan Docker image with Snyk
     #   - name: Snyk Security Scan
     #     uses: snyk/actions/docker@master
@@ -57,9 +57,9 @@ jobs:
     #       echo $IMAGE_URI
     #     id: image-tag
 
-      # Step 7: Push Docker image to ECR  # docker push ${{ steps.image-tag.outputs.IMAGE_URI }}
-    #   - name: Push Docker image to ECR
-    #     run: |
-    #       docker image push '${{ steps.image-tag.outputs.IMAGE_URI }}'
+      #Step 7: Push Docker image to ECR  # docker push ${{ steps.image-tag.outputs.IMAGE_URI }}
+      - name: Push Docker image to ECR
+        run: |
+          docker image push ${{steps.docker-build.outputs.ECR_REGISTRY}}/${{steps.docker-build.outputs.ECR_REPOSITORY}}:${{steps.docker-build.outputs.IMAGE_TAG}}
 
          
