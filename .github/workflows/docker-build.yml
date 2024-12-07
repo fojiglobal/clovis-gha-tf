@@ -48,7 +48,7 @@ jobs:
       - name: Tag Docker image
         run: |
           IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-          docker tag web-app:latest $IMAGE_URI
+          docker tag webapp:latest $IMAGE_URI
           echo $IMAGE_URI
         id: image-tag
 
