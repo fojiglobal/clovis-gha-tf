@@ -31,8 +31,13 @@ jobs:
 
       # Step 4: Build Docker image
       - name: Build Docker image
+        env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            ECR_REPOSITORY: ${{secrets.ECR_REPOSITORY_NAME}}
+            IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t webapp:latest .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     #   # Step 5: Scan Docker image with Snyk
     #   - name: Snyk Security Scan
@@ -45,16 +50,16 @@ jobs:
     #     continue-on-error: true
 
       # Step 6: Tag the Docker image for ECR
-      - name: Tag Docker image
-        run: |
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-          docker tag webapp:latest $IMAGE_URI
-          echo $IMAGE_URI
-        id: image-tag
+    #   - name: Tag Docker image
+    #     run: |
+    #       IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+    #       docker tag webapp:latest $IMAGE_URI
+    #       echo $IMAGE_URI
+    #     id: image-tag
 
       # Step 7: Push Docker image to ECR  # docker push ${{ steps.image-tag.outputs.IMAGE_URI }}
-      - name: Push Docker image to ECR
-        run: |
-          docker image push ${{ steps.image-tag.outputs.IMAGE_URI }}
+    #   - name: Push Docker image to ECR
+    #     run: |
+    #       docker image push '${{ steps.image-tag.outputs.IMAGE_URI }}'
 
          
